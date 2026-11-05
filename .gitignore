@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+.expo-export-check/
+dist/
+android/
+ios/
+*.log
+.DS_Store
+
+# Release signing: keep these out of any repository, but BACK THEM UP somewhere safe
+signing/
