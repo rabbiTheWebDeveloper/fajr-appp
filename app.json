@@ -8,11 +8,20 @@
     "userInterfaceStyle": "automatic",
     "scheme": "fajracademy",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ],
     "assetBundlePatterns": [
       "**/*"
     ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.fajracademy.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
     "android": {
       "package": "io.fajracademy.app",
       "versionCode": 20,
@@ -21,11 +30,14 @@
         "backgroundColor": "#060d20"
       },
       "permissions": [
-        "INTERNET",
-        "ACCESS_NETWORK_STATE",
-        "POST_NOTIFICATIONS",
-        "VIBRATE",
-        "RECEIVE_BOOT_COMPLETED"
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.VIBRATE",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
       "blockedPermissions": [
         "android.permission.CAMERA",
@@ -36,7 +48,10 @@
       ]
     },
     "extra": {
-      "apiUrl": "https://app.fajracademy.io"
+      "apiUrl": "https://app.fajracademy.io",
+      "eas": {
+        "projectId": "51ee1587-29f1-43f8-8941-ce5aad3680b0"
+      }
     },
     "plugins": [
       "expo-font",
@@ -78,12 +93,16 @@
         {
           "android": {
             "usesCleartextTraffic": false,
-            "buildArchs": ["arm64-v8a", "armeabi-v7a"]
+            "buildArchs": [
+              "arm64-v8a",
+              "armeabi-v7a"
+            ]
           }
         }
       ],
       "./plugins/with-release-signing",
       "expo-sharing"
-    ]
+    ],
+    "owner": "fajracademy"
   }
 }

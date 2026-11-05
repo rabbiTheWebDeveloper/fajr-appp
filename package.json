@@ -10,7 +10,9 @@
     "doctor": "expo-doctor",
     "prebuild": "expo prebuild --platform android",
     "export:check": "expo export --platform android --output-dir .expo-export-check",
-    "build:apk": "scripts\\build-apk.bat"
+    "export:check:ios": "expo export --platform ios --output-dir .expo-export-check-ios",
+    "build:apk": "scripts\\build-apk.bat",
+    "build:ipa": "scripts\\build-ipa.bat"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
