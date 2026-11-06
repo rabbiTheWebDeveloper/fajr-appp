@@ -9,7 +9,7 @@ on:
 jobs:
   build-ipa:
     name: Build Fajr Academy .ipa
-    runs-on: macos-14
+    runs-on: macos-latest
     timeout-minutes: 60
 
     steps:
@@ -72,3 +72,4 @@ jobs:
           name: FajrAcademy-iOS-ipa
           path: FajrAcademy.ipa
           if-no-files-found: error
+
