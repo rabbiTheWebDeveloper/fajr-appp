@@ -1,0 +1,74 @@
+name: Build iOS .ipa
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-ipa:
+    name: Build Fajr Academy .ipa
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Prebuild iOS project
+        run: npx expo prebuild --platform ios --clean
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Build Xcode Archive (Unsigned .ipa)
+        run: |
+          WORKSPACE=$(ls ios/*.xcworkspace | head -n 1)
+          SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" -json | node -e '
+            const fs = require("fs");
+            const data = JSON.parse(fs.readFileSync(0, "utf-8"));
+            const schemes = data.workspace.schemes;
+            console.log(schemes.find(s => !s.startsWith("Pods-")) || schemes[0]);
+          ')
+          echo "Building workspace: $WORKSPACE with scheme: $SCHEME"
+
+          xcodebuild archive \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "build/FajrAcademy.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
+
+      - name: Package .ipa
+        run: |
+          mkdir -p Payload
+          APP_PATH=$(find build/FajrAcademy.xcarchive/Products/Applications -name "*.app" | head -n 1)
+          echo "Found compiled app at: $APP_PATH"
+          cp -R "$APP_PATH" Payload/
+          zip -qr FajrAcademy.ipa Payload
+          echo "Created FajrAcademy.ipa successfully!"
+          ls -lh FajrAcademy.ipa
+
+      - name: Upload .ipa Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FajrAcademy-iOS-ipa
+          path: FajrAcademy.ipa
+          if-no-files-found: error
