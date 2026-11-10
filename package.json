@@ -12,6 +12,7 @@
     "export:check": "expo export --platform android --output-dir .expo-export-check",
     "export:check:ios": "expo export --platform ios --output-dir .expo-export-check-ios",
     "build:apk": "scripts\\build-apk.bat",
+    "build:aab": "scripts\\build-aab.bat",
     "build:ipa": "scripts\\build-ipa.bat"
   },
   "dependencies": {
